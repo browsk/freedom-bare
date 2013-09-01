@@ -15,3 +15,11 @@
 *.exe
 *.out
 *.app
+*.srec
+*.axf
+
+# mapfile
+*.map
+
+#vim swapfiles
+*.swp
