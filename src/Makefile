@@ -13,7 +13,7 @@ LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP)
 
 all: $(NAME)-$(CORE).srec
 
-$(NAME)-$(CORE).axf: main.c led.c uart.c $(NAME).c $(STARTUP)
+$(NAME)-$(CORE).axf: buffer.c main.c led.c uart.c $(NAME).c $(STARTUP)
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@ -lnosys
 
 %.srec: %.axf
