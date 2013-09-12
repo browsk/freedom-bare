@@ -10,6 +10,7 @@ typedef struct _ring_buffer
   uint8_t data[RING_BUF_SIZE];
   int head;
   int tail;
+  uint8_t mirror;
 }
 ring_buffer;
 
@@ -31,7 +32,7 @@ void init_ring_buffer(ring_buffer *buffer);
  * @return The number of bytes added. This may be less than count
  *
  */
-int add_bytes(ring_buffer *buffer, void *source, int count);
+int add_bytes(ring_buffer *buffer, uint8_t *source, int count);
 
 /**
  * Read bytes from the specified buffer. Bytes are copied into destination memory
@@ -43,7 +44,7 @@ int add_bytes(ring_buffer *buffer, void *source, int count);
  * @return The number of bytes removed. This may be less than count.
  *
  */
-int get_bytes(ring_buffer *buffer, void *dest, int count);
+int get_bytes(ring_buffer *buffer, uint8_t *dest, int count);
 
 /**
  * Get a single byte from the specified buffer
