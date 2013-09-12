@@ -11,7 +11,7 @@
 #define MCGFLLCLK   48000000
 
 static inline void RGB_LED(int red, int green, int blue) {
-    TPM2_C0V  = red;
-    TPM2_C1V  = green;
-    TPM0_C1V  = blue;
+    TPM2->CONTROLS[0].CnV  = red;
+    TPM2->CONTROLS[1].CnV  = green;
+    TPM0->CONTROLS[1].CnV  = blue;
 }

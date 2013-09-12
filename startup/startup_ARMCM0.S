@@ -64,6 +64,8 @@ __HeapBase:
 __HeapLimit:
     .size __HeapLimit, . - __HeapLimit
     
+
+
     .section .isr_vector
     .align 2
     .globl __isr_vector
@@ -98,7 +100,7 @@ __isr_vector:
     .long    Default_Handler /* I2C1 interrupt */
     .long    Default_Handler /* SPI0 Interrupt */
     .long    Default_Handler/* SPI1 Interrupt */
-    .long    Default_Handler/* UART0 Status and Error interrupt */
+    .long    uart0_isr       /* UART0 Status and Error interrupt */
     .long    Default_Handler  /* UART1 Status and Error interrupt */
     .long    Default_Handler  /* UART2 Status and Error interrupt */
     .long    Default_Handler   /* ADC0 interrupt */
