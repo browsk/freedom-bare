@@ -110,7 +110,7 @@ __isr_vector:
     .long    Default_Handler   /* FTM2 fault, overflow and channels interrupt */
     .long    Default_Handler   /* RTC Alarm interrupt */
     .long    Default_Handler/* RTC Seconds interrupt */
-    .long    Default_Handler  /* PIT timer all channels interrupt */
+    .long    pit_handler  /* PIT timer all channels interrupt */
     .long    Default_Handler /* Reserved interrupt 39/23 */
     .long    Default_Handler/* USB interrupt */
     .long    Default_Handler  /* DAC0 interrupt */
