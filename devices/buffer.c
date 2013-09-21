@@ -41,8 +41,10 @@ int add_bytes(ring_buffer *buffer, const uint8_t *source, int count)
 
     if (is_full(buffer))
     {
+      __DMB();
       __enable_irq();
-      break;
+      while(!is_empty(buffer));
+      __disable_irq();
     }
 
     buffer->data[buffer->head & (RING_BUF_SIZE - 1)] = *data++;

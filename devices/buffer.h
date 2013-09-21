@@ -8,9 +8,8 @@
 typedef struct _ring_buffer
 {
   uint8_t data[RING_BUF_SIZE];
-  int head;
-  int tail;
-  uint8_t mirror;
+  volatile int head;
+  volatile int tail;
 }
 ring_buffer;
 
