@@ -10,7 +10,8 @@ INCLUDES=-I$(ROOTDIR)/CMSIS/Include -I$(ROOTDIR)/devices -I$(ROOTDIR)/include
 
 # Need following option for LTO as LTO will treat retarget functions as
 # unused without following option
-CFLAGS+=-fno-builtin -g $(INCLUDES)
+CFLAGS+=-fno-builtin  $(INCLUDES)
+#CFLAGS+= -g $(INCLUDES)
 
 LDSCRIPTS=-L. -L$(BASE)/ldscripts -T gcc.ld
 
@@ -18,9 +19,9 @@ LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP) -L$(LIBDIR)
 
 SUBDIRS = devices
 
-.PHONY: $(SUBDIRS)
+.PHONY: $(SUBDIRS) 
 
-all: $(OUTDIR) $(SUBDIRS) $(NAME).srec
+all: tags $(OUTDIR) $(SUBDIRS) $(NAME).srec 
 
 $(SUBDIRS):
 	for d in $(SUBDIRS); do make -C $$d; done
@@ -47,7 +48,10 @@ $(NAME).axf: $(OBJS) $(STARTUP)
 $(OUTDIR):
 	mkdir -p $@
 
+tags: $(shell find -name "*.c" -o -name "*.h")
+	@ctags -R
+
 clean: 
-	rm -f *.axf *.map *.o
+	rm -f *.axf *.map *.o *.srec
 	for d in $(SUBDIRS); do make -C $$d clean; done
 
