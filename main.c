@@ -1,30 +1,40 @@
 #include <stdio.h>
 #include "freedom.h"
 #include "uart.h"
+ 
+extern void timer_init();
+//extern void init_led_io(void);
+extern void enable_interrupts();
+extern void delay_ms(int val);
 
-extern void init_led_io(void);
-
-void main()
+int main()
 {
-  int i;
   int r = 0;
   int g = 100;
+  int b = 0;
   int temp = 1;
 
+  enable_interrupts();
+
+  timer_init();
+
+  RGB_LED(0,0,0);
+
+  delay_ms(2000);
   RGB_LED(100,0,0);
 
-  uart0_write_string("blah\n\r");
+//  uart0_write_string("blah");
+  uart0_write_string("12345678901234567890");
 
-  printf("hello");
+  //printf("hello");
 	for (;;)
   {
-    for (i = 0; i < 100000000 && temp > 0 ;i++)
-      temp = temp * 2;
-
+    delay_ms(1000);
+    RGB_LED(r,g,b);
     temp = r;
-    r = g;
+    r = b;
+    b = g;
     g = temp;
-    RGB_LED(0,100,100);
-    //printf("0");
+    uart0_write_string("blah");
   }
 }

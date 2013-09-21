@@ -1,6 +1,8 @@
 #include "uart.h"
 #include "MKL25Z4.h"
 
+extern void init_led_io();
+
 void _ttywrch(int ch);
 static void init_clocks(void)
 {   
