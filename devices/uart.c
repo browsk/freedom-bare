@@ -1,20 +1,32 @@
 #include "MKL25Z4.h"
 #include "freedom.h"
-#include "uart.h"
-
 #include "core_cm0plus.h"
+
+#include "uart.h"
+#include <string.h>
+
+ring_buffer tx_buf;
+
 
 void __attribute__ ((interrupt)) uart0_isr()
 {
-  uart0_write_char('*');
+  if (is_empty(&tx_buf))
+  {
+    UART0->C2 &= ~UART0_C2_TCIE_MASK;
+  }
+  else
+  {
+    uint8_t c;
+    if (get_byte(&tx_buf, &c))
+      UART0->D = c;
+  }
 }
 
 void uart0_write_string(const char *str)
 {
-  char c;
+  add_bytes(&tx_buf, (const uint8_t *)str, strlen(str));
 
-  while(c = *str++)
-    uart0_write_char(c);
+  UART0->C2 |= UART0_C2_TCIE_MASK;
 }
 
 void uart0_write_char(char c)
@@ -25,21 +37,12 @@ void uart0_write_char(char c)
   UART0->D = c;
 }
 
-static void enable_interrupts(void)
+void enable_interrupts(void)
 {
   // Configure NVIC
-/*
-  NVIC_EnableIRQ(12);
-  // disable pending interrupts
-  NVIC_ICPR |= (1 << 12);
-  // set priority
-  NVIC_IPR3 |= NVIC_IP_PRI_12(3);
-
-  NVIC_ISER |= (1 << 12);
-*/
-  // configure UART0 interrupts
-
-
+  NVIC_ClearPendingIRQ(UART0_IRQn);
+  NVIC_SetPriority(UART0_IRQn, 3);
+  NVIC_EnableIRQ(UART0_IRQn);
 }
 
 void uart0_init()
@@ -88,5 +91,6 @@ void uart0_init()
 
   RGB_LED(100,100,100);
 
-  enable_interrupts();
+  init_ring_buffer(&tx_buf);
+  //enable_interrupts();
 }
