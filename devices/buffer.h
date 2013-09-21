@@ -3,7 +3,7 @@
 
 #include <stdint.h>
 
-#define RING_BUF_SIZE 64
+#define RING_BUF_SIZE 16 //64
 
 typedef struct _ring_buffer
 {
@@ -32,7 +32,7 @@ void init_ring_buffer(ring_buffer *buffer);
  * @return The number of bytes added. This may be less than count
  *
  */
-int add_bytes(ring_buffer *buffer, uint8_t *source, int count);
+int add_bytes(ring_buffer *buffer, const uint8_t *source, int count);
 
 /**
  * Read bytes from the specified buffer. Bytes are copied into destination memory
@@ -57,4 +57,5 @@ int get_bytes(ring_buffer *buffer, uint8_t *dest, int count);
  */
 int get_byte(ring_buffer *buffer, uint8_t *byte);
 
+int is_empty(ring_buffer *buffer);
 #endif
