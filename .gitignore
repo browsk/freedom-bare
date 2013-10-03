@@ -23,3 +23,16 @@
 
 #vim swapfiles
 *.swp
+
+#backup files
+*.*~
+
+# listings
+*.lst
+
+# ctags file
+tags
+
+# eclipse files
+.project
+.cproject
