@@ -3,7 +3,7 @@ include $(ROOTDIR)/makefile.conf
 
 INCLUDES=-I$(ROOTDIR)/CMSIS/Include -I$(ROOTDIR)/include
 
-CFLAGS+=-fno-builtin $(INCLUDES)
+CFLAGS+=-fno-builtin $(INCLUDES) -g
 
 LIBDIR=$(ROOTDIR)/lib
 
