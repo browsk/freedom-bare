@@ -9,22 +9,22 @@
 
 #define NEXT_INDEX(x) ((x + 1) & (2 * RING_BUF_SIZE - 1))
 
-int is_empty(ring_buffer *buffer)
+int is_empty(struct ring_buffer *buffer)
 {
   return buffer->head == buffer->tail;
 }
 
-static int is_full(ring_buffer *buffer)
+static int is_full(struct ring_buffer *buffer)
 {
   return buffer->tail == (buffer->head ^ RING_BUF_SIZE);
 }
 
-void init_ring_buffer(ring_buffer *buffer)
+void init_ring_buffer(struct ring_buffer *buffer)
 {
   memset(buffer, 0, sizeof(buffer));
 }
 
-int add_bytes(ring_buffer *buffer, const uint8_t *source, int count)
+int add_bytes(struct ring_buffer *buffer, const uint8_t *source, int count)
 {
   const uint8_t * data = source;
 
@@ -48,7 +48,7 @@ int add_bytes(ring_buffer *buffer, const uint8_t *source, int count)
   return data - source;
 }
 
-int get_bytes(ring_buffer *buffer, uint8_t *dest, int count)
+int get_bytes(struct ring_buffer *buffer, uint8_t *dest, int count)
 {
   uint8_t * data = dest;
 
@@ -73,7 +73,7 @@ int get_bytes(ring_buffer *buffer, uint8_t *dest, int count)
   return data - dest;
 } 
 
-int get_byte(ring_buffer *buffer, uint8_t *byte)
+int get_byte(struct ring_buffer *buffer, uint8_t *byte)
 {
   return get_bytes(buffer, byte, 1);
 }

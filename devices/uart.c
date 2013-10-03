@@ -5,7 +5,7 @@
 #include "uart.h"
 #include <string.h>
 
-ring_buffer tx_buf;
+struct ring_buffer tx_buf;
 
 
 void __attribute__ ((interrupt)) uart0_isr()

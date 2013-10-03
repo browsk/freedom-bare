@@ -5,13 +5,12 @@
 
 #define RING_BUF_SIZE 16 //64
 
-typedef struct _ring_buffer
+struct ring_buffer
 {
   uint8_t data[RING_BUF_SIZE];
   volatile int head;
   volatile int tail;
-}
-ring_buffer;
+};
 
 /**
  * Initialise ring buffer ready for use. This function MUST be called prior to
@@ -19,7 +18,7 @@ ring_buffer;
  *
  * @param buffer  The buffer to initialise
  */
-void init_ring_buffer(ring_buffer *buffer);
+void init_ring_buffer(struct ring_buffer *buffer);
 
 /**
  * Add bytes to the specified buffer. Bytes are added up until the buffer is full
@@ -31,7 +30,7 @@ void init_ring_buffer(ring_buffer *buffer);
  * @return The number of bytes added. This may be less than count
  *
  */
-int add_bytes(ring_buffer *buffer, const uint8_t *source, int count);
+int add_bytes(struct ring_buffer *buffer, const uint8_t *source, int count);
 
 /**
  * Read bytes from the specified buffer. Bytes are copied into destination memory
@@ -43,7 +42,7 @@ int add_bytes(ring_buffer *buffer, const uint8_t *source, int count);
  * @return The number of bytes removed. This may be less than count.
  *
  */
-int get_bytes(ring_buffer *buffer, uint8_t *dest, int count);
+int get_bytes(struct ring_buffer *buffer, uint8_t *dest, int count);
 
 /**
  * Get a single byte from the specified buffer
@@ -54,7 +53,7 @@ int get_bytes(ring_buffer *buffer, uint8_t *dest, int count);
  * @return  1 if a byte was removeed, 0 otherwiseA
  *
  */
-int get_byte(ring_buffer *buffer, uint8_t *byte);
+int get_byte(struct ring_buffer *buffer, uint8_t *byte);
 
-int is_empty(ring_buffer *buffer);
+int is_empty(struct ring_buffer *buffer);
 #endif
