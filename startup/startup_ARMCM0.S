@@ -66,7 +66,7 @@ __HeapLimit:
     
 
 
-    .section .isr_vector
+    .section .isr_vector,"ax" 
     .align 2
     .globl __isr_vector
 __isr_vector:
