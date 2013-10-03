@@ -10,7 +10,7 @@ INCLUDES=-I$(ROOTDIR)/CMSIS/Include -I$(ROOTDIR)/devices -I$(ROOTDIR)/include
 
 # Need following option for LTO as LTO will treat retarget functions as
 # unused without following option
-CFLAGS+=-fno-builtin  $(INCLUDES)
+CFLAGS+=-fno-builtin  $(INCLUDES) -g
 #CFLAGS+= -g $(INCLUDES)
 
 LDSCRIPTS=-L. -L$(BASE)/ldscripts -T gcc.ld
@@ -39,7 +39,7 @@ ASMFILES := $(patsubst %c,%s,$(SOURCES))
 %.o: %.c
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-$(NAME).axf: $(OBJS) $(STARTUP)
+$(NAME).axf: $(OBJS) $(STARTUP) lib/libdevices.a
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@ -lnosys $(LIBS)
 
 %.srec: %.axf
