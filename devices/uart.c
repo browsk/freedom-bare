@@ -24,9 +24,13 @@ void __attribute__ ((interrupt)) uart0_isr()
 
 void uart0_write_string(const char *str)
 {
-  add_bytes(&tx_buf, (const uint8_t *)str, strlen(str));
+  int count = strlen(str);
 
-  UART0->C2 |= UART0_C2_TCIE_MASK;
+  while(count > 0)
+  {
+    count -= add_bytes(&tx_buf, (const uint8_t *)str, count);
+    UART0->C2 |= UART0_C2_TCIE_MASK;
+  }
 }
 
 void uart0_write_char(char c)

@@ -7,13 +7,6 @@
 #include "core_cmFunc.h"
 #include "freedom.h"
 
-extern void uart0_write_char(char);
-
-void test_buffer()
-{
-  
-}
-
 #define NEXT_INDEX(x) ((x + 1) & (2 * RING_BUF_SIZE - 1))
 
 int is_empty(ring_buffer *buffer)
@@ -37,14 +30,14 @@ int add_bytes(ring_buffer *buffer, const uint8_t *source, int count)
 
   while(count--)
   {
+    // diable and enable interrupts each time around the loop to minimise the amount of time 
+    // with ints disabled
     __disable_irq();
 
     if (is_full(buffer))
     {
-      __DMB();
       __enable_irq();
-      while(!is_empty(buffer));
-      __disable_irq();
+      break;
     }
 
     buffer->data[buffer->head & (RING_BUF_SIZE - 1)] = *data++;
@@ -64,8 +57,12 @@ int get_bytes(ring_buffer *buffer, uint8_t *dest, int count)
   {
     __disable_irq();
 
+    // no point continuing if buffer is empty
     if (is_empty(buffer))
+    {
+      __enable_irq();
       break;
+    }
 
     *data++ = buffer->data[buffer->tail & (RING_BUF_SIZE - 1)];
     buffer->tail = NEXT_INDEX(buffer->tail);
