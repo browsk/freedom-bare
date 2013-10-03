@@ -9,5 +9,4 @@ extern void uart0_write_char(char c);
 
 extern void uart0_write_string(const char *str);
 
-
 #endif
