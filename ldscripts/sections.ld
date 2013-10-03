@@ -28,9 +28,23 @@ ENTRY(Reset_Handler)
 
 SECTIONS
 {
+  .isr_vector :
+  {
+    __vector_table = .;
+    . = ALIGN(4);
+    KEEP(*(.isr_vector))
+    . = ALIGN(4);
+  } > VECTORS
+
+ .cfmprotect :
+  {
+    . = ALIGN(4);
+        KEEP(*(.cfmconfig))     /* Flash Configuration Field (FCF) */
+    . = ALIGN(4);
+  } > FLASHCONF
+
 	.text :
 	{
-		KEEP(*(.isr_vector))
 		*(.text*)
 
 		KEEP(*(.init))
