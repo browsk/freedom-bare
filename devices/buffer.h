@@ -1,3 +1,7 @@
+/**
+ * @file 
+ * @brief  Simple ring buffer used by the uart driver
+ */
 #ifndef _BUFFER_H
 #define _BUFFER_H
 
