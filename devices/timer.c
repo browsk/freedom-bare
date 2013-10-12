@@ -6,12 +6,16 @@ extern void uart0_write_string(const char *str);
 
 extern void uart0_write_char(char c);
 
+extern void os_tick();
+
 static volatile int delay_val = 0;
 
 void pit_handler()
 {
     PIT->CHANNEL[0].TFLG = PIT_TFLG_TIF_MASK;
     delay_val--;
+
+    os_tick();
 }
 
 void timer_init()

@@ -17,7 +17,7 @@ LDSCRIPTS=-L. -L$(BASE)/ldscripts -T gcc.ld
 
 LFLAGS=$(USE_NANO) $(USE_NOHOST) $(LDSCRIPTS) $(GC) $(MAP) -L$(LIBDIR)
 
-SUBDIRS = devices
+SUBDIRS = devices os
 
 .PHONY: $(SUBDIRS) 
 
@@ -26,7 +26,7 @@ all: tags $(OUTDIR) $(SUBDIRS) $(NAME).srec
 $(SUBDIRS):
 	for d in $(SUBDIRS); do make -C $$d; done
 
-LIBS = -ldevices
+LIBS = -ldevices -los
 
 
 SOURCES = main.c retarget.c
@@ -39,7 +39,7 @@ ASMFILES := $(patsubst %c,%s,$(SOURCES))
 %.o: %.c
 	$(CC) -c -o $@ $(CFLAGS) $<
 
-$(NAME).axf: $(OBJS) $(STARTUP) lib/libdevices.a
+$(NAME).axf: $(OBJS) $(STARTUP) lib/libdevices.a lib/libos.a
 	$(CC) $^ $(CFLAGS) $(LFLAGS) -o $@ -lnosys $(LIBS)
 
 %.srec: %.axf

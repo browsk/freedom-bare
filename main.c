@@ -6,6 +6,7 @@ extern void timer_init();
 //extern void init_led_io(void);
 extern void enable_interrupts();
 extern void delay_ms(int val);
+extern void start_tasks();
 
 int main()
 {
@@ -26,16 +27,18 @@ int main()
     uart0_write_string("blah");
     uart0_write_string("blah\r\n");
 
+    start_tasks();
+
     for (;;) {
-	delay_ms(1000);
-	RGB_LED(r, g, b);
-	temp = r;
-	r = b;
-	b = g;
-	g = temp;
-	uart0_write_string
-	    ("123456789012345678901234567890123456789012345678901234567890\n\r");
-	uart0_write_string("1234567890\r\n");
-	uart0_write_string("blah\r\n");
+    	delay_ms(1000);
+    	RGB_LED(r, g, b);
+	    temp = r;
+    	r = b;
+    	b = g;
+    	g = temp;
+    	uart0_write_string
+	        ("123456789012345678901234567890123456789012345678901234567890\n\r");
+	    uart0_write_string("1234567890\r\n");
+    	uart0_write_string("blah\r\n");
     }
 }
