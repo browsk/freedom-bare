@@ -1,11 +1,15 @@
 /**
- * @file 
+ * @file
  * @brief  Simple ring buffer used by the uart driver
  */
 #ifndef _BUFFER_H
 #define _BUFFER_H
 
 #include <stdint.h>
+
+#ifdef __cplusplus
+extern "C" {
+#endif
 
 #define RING_BUF_SIZE 16	// 64
 
@@ -25,7 +29,7 @@ void init_ring_buffer(struct ring_buffer *buffer);
 
 /**
  * Add bytes to the specified buffer. Bytes are added up until the buffer is full
- * 
+ *
  * @param buffer  pointer to the ring buffer to add chars to
  * @param source  pointer to the source data
  * @param count   number of bytes to add to the ring buffer
@@ -60,4 +64,10 @@ int get_bytes(struct ring_buffer *buffer, uint8_t * dest, int count);
 int get_byte(struct ring_buffer *buffer, uint8_t * byte);
 
 int is_empty(struct ring_buffer *buffer);
+
+#ifdef __cplusplus
+}
+#endif
+
+
 #endif

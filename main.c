@@ -8,6 +8,10 @@ extern void enable_interrupts();
 extern void delay_ms(int val);
 extern void start_tasks();
 
+extern uint8_t read_device_id();
+extern void i2c_init();
+
+
 int main()
 {
     int r = 0;
@@ -18,6 +22,7 @@ int main()
     enable_interrupts();
 
     timer_init();
+    i2c_init();
 
 //  RGB_LED(0,0,0);
 
@@ -27,18 +32,25 @@ int main()
     uart0_write_string("blah");
     uart0_write_string("blah\r\n");
 
-    start_tasks();
+    char buf[80];
+//    start_tasks();
 
     for (;;) {
-    	delay_ms(1000);
-    	RGB_LED(r, g, b);
-	    temp = r;
-    	r = b;
-    	b = g;
-    	g = temp;
-    	uart0_write_string
-	        ("123456789012345678901234567890123456789012345678901234567890\n\r");
-	    uart0_write_string("1234567890\r\n");
-    	uart0_write_string("blah\r\n");
+        delay_ms(1000);
+        RGB_LED(r, g, b);
+        temp = r;
+        r = b;
+        b = g;
+        g = temp;
+
+        uint8_t id = read_device_id();
+        sprintf(buf, "\nID:%u\n\r", (unsigned)id);
+        uart0_write_string(buf);
+/*
+        uart0_write_string
+            ("123456789012345678901234567890123456789012345678901234567890\n\r");
+        uart0_write_string("1234567890\r\n");
+        uart0_write_string("blah\r\n");
+*/
     }
 }

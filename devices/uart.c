@@ -10,12 +10,12 @@ struct ring_buffer tx_buf;
 void __attribute__ ((interrupt)) uart0_isr()
 {
     if (is_empty(&tx_buf)) {
-	    UART0->C2 &= ~UART0_C2_TCIE_MASK;
-    } 
+        UART0->C2 &= ~UART0_C2_TCIE_MASK;
+    }
     else {
-	    uint8_t c;
-	    if (get_byte(&tx_buf, &c))
-	        UART0->D = c;
+        uint8_t c;
+        if (get_byte(&tx_buf, &c))
+            UART0->D = c;
     }
 }
 
@@ -27,8 +27,8 @@ void uart0_write_string(const char *str)
 
         while(!is_empty(&tx_buf));
 
-    	count -= add_bytes(&tx_buf, (const uint8_t *) str, count);
-	    UART0->C2 |= UART0_C2_TCIE_MASK;
+        count -= add_bytes(&tx_buf, (const uint8_t *) str, count);
+        UART0->C2 |= UART0_C2_TCIE_MASK;
     }
 }
 
