@@ -7,17 +7,44 @@
 
 struct ring_buffer tx_buf;
 
+static read_callback_t read_callback = 0;
+
 void __attribute__ ((interrupt)) uart0_isr()
 {
-    if (is_empty(&tx_buf)) {
-        UART0->C2 &= ~UART0_C2_TCIE_MASK;
+    uint8_t status = UART0->S1;
+
+    if (status & UART_S1_TDRE_MASK)
+    {
+	if (is_empty(&tx_buf)) {
+	    UART0->C2 &= ~UART0_C2_TCIE_MASK;
+	}
+	else {
+	    uint8_t c;
+	    if (get_byte(&tx_buf, &c))
+		UART0->D = c;
+	}
     }
-    else {
-        uint8_t c;
-        if (get_byte(&tx_buf, &c))
-            UART0->D = c;
+
+    if (status & UART_S1_RDRF_MASK)
+    {
+	char c = UART0->D;
+
+	if (read_callback)
+	    read_callback(c);
     }
 }
+
+
+void uart0_register_read_callback(read_callback_t callback)
+{
+    // disable read interrupt
+    UART0->C2 &= ~UART0_C2_RIE_MASK;
+
+    read_callback = callback;
+    
+    UART0->C2 |= UART0_C2_RIE_MASK;
+}
+
 
 void uart0_write_string(const char *str)
 {
@@ -27,7 +54,10 @@ void uart0_write_string(const char *str)
 
         while(!is_empty(&tx_buf));
 
-        count -= add_bytes(&tx_buf, (const uint8_t *) str, count);
+        int written = add_bytes(&tx_buf, (const uint8_t *) str, count);
+	count -= written;
+	str += written;
+	
         UART0->C2 |= UART0_C2_TCIE_MASK;
     }
 }
@@ -88,7 +118,7 @@ void uart0_init()
     RGB_LED(100, 100, 100);
 
     // enable TX and RX
-    UART0->C2 = UART_C2_TE_MASK;	// | UART_C2_RE_MASK;
+    UART0->C2 = UART_C2_TE_MASK | UART_C2_RE_MASK | UART_C2_RIE_MASK;
 
     RGB_LED(100, 0, 100);
 

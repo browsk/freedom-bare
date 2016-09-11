@@ -30,7 +30,7 @@ int add_bytes(struct ring_buffer *buffer, const uint8_t * source,
 
     while (count--) {
     	// diable and enable interrupts each time around the loop to
-	    // minimise the amount of time with ints disabled
+	// minimise the amount of time with ints disabled
     	__disable_irq();
 
 	    if (is_full(buffer)) {
@@ -41,7 +41,7 @@ int add_bytes(struct ring_buffer *buffer, const uint8_t * source,
     	buffer->data[buffer->head & (RING_BUF_SIZE - 1)] = *data++;
     	buffer->head = NEXT_INDEX(buffer->head);
 
-	    __enable_irq();
+	__enable_irq();
     }
     return data - source;
 }
